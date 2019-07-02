@@ -345,7 +345,7 @@ function DesktopVersion({ user, image, state, effects }) {
                     ),
                 user !== false &&
                     h('a.link.pointer.btn.btn-link', [
-                        h('i.icon-crown.gold'),
+                        h('i.icon-crown.text-warning'),
                         h('span.b', {}, user.gaming.swords),
                         missed > 0 &&
                             h('span.new-reputation', {}, `+${missed}`),

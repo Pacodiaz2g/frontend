@@ -161,7 +161,7 @@ function Profile({ state, effects }) {
                     t`Aún no has escrito tu biografía. Ayuda a otros a conocer sobre ti escribiendo una en tu perfil.`
                 ),
             div('.mw5.mb3.center', [
-                i('.icon-crown.gold.f5'),
+                i('.icon-crown.text-warning.f5'),
                 span('.db.mb2.f5', [
                     span('.b', number(user.gaming.swords)),
                     ' / reputación',
