@@ -6,7 +6,19 @@ import { Fragment, useState } from 'react';
 import { t } from '../../i18n';
 
 const tags = helpers(h);
-const { div, a, p, form, input, select, option, textarea } = tags;
+const {
+    div,
+    a,
+    p,
+    form,
+    input,
+    select,
+    option,
+    textarea,
+    label,
+    span,
+    h2,
+} = tags;
 
 export function ConfirmWithReasonLink(props) {
     const [open, setOpen] = useState(false);
@@ -244,6 +256,112 @@ export function BanWithReason(props) {
                                 value: props.action || 'Continuar',
                                 className: classNames({ loading: sending }),
                             }),
+                        ]),
+                    ]),
+                ]
+            ),
+    ]);
+}
+
+export function updateSite(props) {
+    const [open, setOpen] = useState(false);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [url, setUrl] = useState('');
+    const [sending, setSending] = useState(false);
+    const disabled = !name.length || !description.length || !url.lengt;
+
+    async function onSubmit(event) {
+        event.preventDefault();
+        if (sending) {
+            return;
+        }
+        setSending(true);
+        await Promise.resolve(props.onUpdateSite({ name, description, url }));
+        setSending(false);
+        setOpen(false);
+    }
+    return h(Fragment, [
+        a(
+            '.pointer.post-action',
+            {
+                onClick: () => setOpen(true),
+            },
+            props.children || []
+        ),
+        open != true &&
+            h(
+                Modal,
+                {
+                    isOpen: open,
+                    onRequestClose: () => setOpen(false),
+                    ariaHideApp: false,
+                    contentLabel: props.action || 'Feedback',
+                    className: 'feedback-modal',
+                    style: {
+                        overlay: {
+                            zIndex: 301,
+                            backgroundColor: 'rgba(0, 0, 0, 0.30)',
+                        },
+                    },
+                },
+                [
+                    form({ id: 'update-site' }, { onSubmit }, [
+                        div('.flex.items-center.header', [
+                            h2('.flex-auto', 'General'),
+                            span([
+                                input('.btn.btn-primary.btn-block', {
+                                    disabled,
+                                    type: 'submit',
+                                    value: 'Guardar cambios',
+                                }),
+                            ]),
+                        ]),
+                        div('.form-group', [
+                            label('.b.form-label', 'Nombre del sitio'),
+                            input('.form-input', {
+                                name: 'name',
+                                type: 'text',
+                                placeholder: 'Ej. Comunidad de Anzu',
+                                required: true,
+                                value: name,
+                                onChange: event => setName(event.target.value),
+                            }),
+                            p(
+                                '.form-input-hint',
+                                'Mostrado alrededor del sitio, el nombre de tu comunidad.'
+                            ),
+                        ]),
+                        div('.form-group', [
+                            label('.b.form-label', 'Descripción del sitio'),
+                            textarea('.form-input', {
+                                name: 'description',
+                                placeholder: '...',
+                                rows: 3,
+                                required: true,
+                                value: description,
+                                onChange: event =>
+                                    setDescription(event.target.value),
+                            }),
+                            p(
+                                '.form-input-hint',
+                                'Para metadatos, resultados de busqueda y dar a conocer tu comunidad.'
+                            ),
+                        ]),
+                        div('.form-group', [
+                            label('.b.form-label', 'Dirección del sitio'),
+                            input('.form-input', {
+                                name: 'url',
+                                type: 'text',
+                                placeholder: 'Ej. https://comunidad.anzu.io',
+                                required: true,
+                                value: url,
+                                onChange: event => setUrl(event.target.value),
+                            }),
+                            p(
+                                '.form-input-hint.lh-copy',
+                                'URL absoluta donde vive la instalación de Anzu. Utilizar una dirección no accesible puede provocar no poder acceder al sitio.'
+                            ),
                         ]),
                     ]),
                 ]
