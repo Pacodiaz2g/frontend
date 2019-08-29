@@ -2,14 +2,14 @@ import h from 'react-hyperscript';
 import Modal from 'react-modal';
 import helpers from 'hyperscript-helpers';
 import { t } from '../../i18n';
+import { updateSite } from './actions';
 
 const tags = helpers(h);
 const { div, img, i, nav, a, p } = tags;
-const { span, h2, form, input, label, textarea } = tags;
+const { span, form, input, label } = tags;
 
-export function ConfigModal({ state, setOpen }) {
+export function ConfigModal({ state, effects, setOpen }) {
     const { site } = state;
-    const dirty = false;
     return h(
         Modal,
         {
@@ -40,59 +40,10 @@ export function ConfigModal({ state, setOpen }) {
                     a([i('.icon-picture-outline.mr1'), 'Diseño']),
                 ]),
                 div('.flex-auto', [
-                    form({ id: 'update-site' }, [
-                        div('.flex.items-center.header', [
-                            h2('.flex-auto', 'General'),
-                            dirty === true &&
-                                span([
-                                    input('.btn.btn-primary.btn-block', {
-                                        type: 'submit',
-                                        value: 'Guardar cambios',
-                                    }),
-                                ]),
-                        ]),
-                        div('.form-group', [
-                            label('.b.form-label', 'Nombre del sitio'),
-                            input('.form-input', {
-                                name: 'name',
-                                type: 'text',
-                                placeholder: 'Ej. Comunidad de Anzu',
-                                required: true,
-                                value: site.name,
-                            }),
-                            p(
-                                '.form-input-hint',
-                                'Mostrado alrededor del sitio, el nombre de tu comunidad.'
-                            ),
-                        ]),
-                        div('.form-group', [
-                            label('.b.form-label', 'Descripción del sitio'),
-                            textarea('.form-input', {
-                                value: site.description,
-                                name: 'description',
-                                placeholder: '...',
-                                rows: 3,
-                            }),
-                            p(
-                                '.form-input-hint',
-                                'Para metadatos, resultados de busqueda y dar a conocer tu comunidad.'
-                            ),
-                        ]),
-                        div('.form-group', [
-                            label('.b.form-label', 'Dirección del sitio'),
-                            input('.form-input', {
-                                name: 'url',
-                                type: 'text',
-                                placeholder: 'Ej. https://comunidad.anzu.io',
-                                required: true,
-                                value: site.url,
-                            }),
-                            p(
-                                '.form-input-hint.lh-copy',
-                                'URL absoluta donde vive la instalación de Anzu. Utilizar una dirección no accesible puede provocar no poder acceder al sitio.'
-                            ),
-                        ]),
-                    ]),
+                    h(updateSite, {
+                        onUpdateSite: form =>
+                            effects.requestConfigSave({ ...form }),
+                    }),
                     form('.bt.b--light-gray.pt2', { id: 'links' }, [
                         div('.form-group', [
                             label('.b.form-label', 'Menu de navegación'),

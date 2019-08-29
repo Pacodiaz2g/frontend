@@ -423,6 +423,29 @@ function requestUserBan(effects, form) {
         });
 }
 
+function requestConfigSave(effects, form) {
+    const config = {
+        name: form.name,
+        description: form.description,
+        url: form.url,
+    };
+    return jsonReq(request('UpdateSite', { method: 'PUT', config }))
+        .then(response => state => ({
+            ...state,
+            auth: {
+                ...state.auth,
+                user: {
+                    ...state.auth.user,
+                    ...(response.user || {}),
+                },
+            },
+        }))
+        .catch(message => {
+            toast.error(t`${message}`);
+            return state => state;
+        });
+}
+
 function updateProfile(effects, form) {
     return jsonReq(
         request(`user/my`, {
@@ -585,6 +608,7 @@ export default provideState({
         requestPasswordReset,
         requestFlag,
         requestUserBan,
+        requestConfigSave,
         fetchRequest,
         fetchGamification,
         postNewAvatar,
