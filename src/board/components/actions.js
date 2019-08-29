@@ -289,7 +289,7 @@ export function updateSite(props) {
             },
             props.children || []
         ),
-        open != true &&
+        open === true &&
             h(
                 Modal,
                 {
