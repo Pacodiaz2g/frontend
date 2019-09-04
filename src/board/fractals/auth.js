@@ -423,23 +423,26 @@ function requestUserBan(effects, form) {
         });
 }
 
-function requestConfigSave(effects, form) {
+function requestConfigSave(form) {
     const config = {
         name: form.name,
         description: form.description,
         url: form.url,
     };
-    return jsonReq(request('UpdateSite', { method: 'PUT', config }))
-        .then(response => state => ({
-            ...state,
-            auth: {
-                ...state.auth,
-                user: {
-                    ...state.auth.user,
-                    ...(response.user || {}),
+    const body = { section: 'site', changes: config };
+    return jsonReq(request('body', { method: 'PUT', body }))
+        .then(response => state =>
+            state({
+                ...state,
+                auth: {
+                    ...state.auth,
+                    user: {
+                        ...state.auth.user,
+                        ...(response.user || {}),
+                    },
                 },
-            },
-        }))
+            })
+        )
         .catch(message => {
             toast.error(t`${message}`);
             return state => state;
