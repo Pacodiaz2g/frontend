@@ -57,7 +57,7 @@ export function ConfigModal({ state, effects, setOpen }) {
                 div('.flex-auto', [
                     form({ id: 'update-site', onSubmit }, [
                         div('.flex.items-center.header', [
-                            h2('.flex-auto', 'General'),
+                            h2('.flex-auto', t`General`),
                             dirty === true &&
                                 span([
                                     input('.btn.btn-inline', {
@@ -140,7 +140,7 @@ export function ConfigModal({ state, effects, setOpen }) {
                     ]),
                     form('.bt.b--light-gray.pt2', { id: 'links' }, [
                         div('.form-group', [
-                            label('.b.form-label', 'Menu de navegación'),
+                            label('.b.form-label', t`Menu de navegación`),
                             p(
                                 '.form-input-hint',
                                 t`Mostrado en la parte superior del sitio. (- = +)`
